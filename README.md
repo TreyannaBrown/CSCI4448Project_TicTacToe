@@ -4,6 +4,7 @@ Object-Oriented Programming Project
 Group Members: Derek Marraudino, Treyanna Brown 
 
 **Project Description**
+
 Tic-Tac-Toe is a classic game played by people of all ages around the world! We will apply Object-Oriented Programming fundamentals to program a fun interractive game. 
 
 **Mid Project Review Description**
