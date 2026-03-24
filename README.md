@@ -7,6 +7,7 @@ Group Members: Derek Marraudino, Treyanna Brown
 Tic-Tac-Toe is a classic game played by people of all ages around the world! We will apply Object-Oriented Programming fundamentals to program a fun interractive game. 
 
 **Mid Project Review Description**
+
 Three Design Patterns:
 The first pattern used is within the SwingTicTacToe class. This uses a type of observer pattern because it is dependent upon input clicks from the user. When a button is clicked, the listener responds. 
 
