@@ -1,4 +1,4 @@
-package tictactoe.ui;
+    package tictactoe.ui;
 
 import tictactoe.TicTacToe;
 import javax.swing.*;
