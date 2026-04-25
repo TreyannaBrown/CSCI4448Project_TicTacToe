@@ -1,30 +1,33 @@
 package tictactoe;
 
-import tictactoe.enums.GridValues;
-
 public class Board {
-    private GridValues[][] grid;
-    private CheckWinCondition winChecker;
-    public Board(GridValues[][] grid, CheckWinCondition winChecker){
-        this.grid = grid;
-        this.winChecker = winChecker;
-    }
+    private String[][] grid = new String[3][3];
 
-    public void EnterCellValue(int row, int column, GridValues value){
-        grid[row][column] = value;
-    }
-
-    public GridValues[][] getGrid() {
-        GridValues[][] gridCopy = new GridValues[grid.length][grid.length];
-
-        for(int i = 0; i < grid.length; i++) {
-            gridCopy[i] = grid[i].clone();
+    public boolean placeMove(int row, int col, String symbol) {
+        if (grid[row][col] != null) {
+            return false;
         }
 
-        return gridCopy;
+        grid[row][col] = symbol;
+        return true;
     }
 
-    public boolean checkForWin(){
-        return winChecker.CheckIfWin(getGrid());
+    public String getValue(int row, int col) {
+        return grid[row][col];
+    }
+
+    public String[][] getGrid() {
+        return grid;
+    }
+
+    public boolean isFull() {
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                if (grid[row][col] == null) {
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }

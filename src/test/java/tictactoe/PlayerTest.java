@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import tictactoe.players.ComputerPlayer;
 import tictactoe.players.HumanPlayer;
 import tictactoe.players.Player;
+import tictactoe.strategies.EasyMoveStrategy;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -17,7 +18,7 @@ public class PlayerTest {
 
     @Test
     void computerPlayerIsComputer() {
-        Player cpu = new ComputerPlayer("CPU", "O");
+        Player cpu = new ComputerPlayer("CPU", "O", new EasyMoveStrategy());
         assertTrue(cpu.isComputer());
     }
 }

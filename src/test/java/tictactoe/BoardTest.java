@@ -1,26 +1,73 @@
 package tictactoe;
 
 import org.junit.jupiter.api.Test;
-import tictactoe.enums.GameType;
-import tictactoe.enums.GridValues;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class BoardTest {
+public class BoardTest {
 
     @Test
-    void check10X10BoardCreation(){
-        BoardFactory factory = new BoardFactory();
-        Board board = factory.createBoard(10, GameType.STANDARD);
-        board.EnterCellValue(9,9,GridValues.X);
-        assertNotNull(board.getGrid()[9][9]);
+    public void testBoardStartsEmpty() {
+        Board board = new Board();
+
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                assertNull(board.getValue(row, col));
+            }
+        }
     }
 
     @Test
-    void checkBoardUpdate(){
-        BoardFactory factory = new BoardFactory();
-        Board board = factory.createBoard(3, GameType.STANDARD);
-        board.EnterCellValue(1,1, GridValues.X);
-        assertEquals(board.getGrid()[1][1], GridValues.X);
+    public void testPlaceMoveOnEmptySpot() {
+        Board board = new Board();
+
+        boolean movePlaced = board.placeMove(0, 0, "X");
+
+        assertTrue(movePlaced);
+        assertEquals("X", board.getValue(0, 0));
+    }
+
+    @Test
+    public void testCannotPlaceMoveOnOccupiedSpot() {
+        Board board = new Board();
+
+        board.placeMove(1, 1, "X");
+        boolean secondMovePlaced = board.placeMove(1, 1, "O");
+
+        assertFalse(secondMovePlaced);
+        assertEquals("X", board.getValue(1, 1));
+    }
+
+    @Test
+    public void testBoardIsNotFullAtStart() {
+        Board board = new Board();
+
+        assertFalse(board.isFull());
+    }
+
+    @Test
+    public void testBoardIsFullAfterAllSpacesFilled() {
+        Board board = new Board();
+
+        String symbol = "X";
+
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                board.placeMove(row, col, symbol);
+            }
+        }
+
+        assertTrue(board.isFull());
+    }
+
+    @Test
+    public void testGetGridReturnsPlacedValues() {
+        Board board = new Board();
+
+        board.placeMove(2, 2, "O");
+
+        String[][] grid = board.getGrid();
+
+        assertEquals("O", grid[2][2]);
     }
 }

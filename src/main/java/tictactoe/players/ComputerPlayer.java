@@ -1,14 +1,21 @@
 package tictactoe.players;
 
+import tictactoe.strategies.MoveStrategy;
+
 public class ComputerPlayer extends Player {
-    public ComputerPlayer(String name, String symbol){
+    private MoveStrategy moveStrategy;
+
+    public ComputerPlayer(String name, String symbol, MoveStrategy moveStrategy) {
         super(name, symbol);
+        this.moveStrategy = moveStrategy;
     }
 
     @Override
-    public boolean isComputer(){
+    public boolean isComputer() {
         return true;
-    };
+    }
 
-    // do move. first available spot ? random ?
+    public int[] getMove(String[][] board) {
+        return moveStrategy.chooseMove(board);
+    }
 }
