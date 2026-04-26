@@ -10,17 +10,17 @@ import java.util.List;
 
 public class TicTacToe {
     private Board board;
-    private Player player1;
-    private Player player2;
+    private final Player player1;
+    private final Player player2;
     private Player currentPlayer;
     private Player winner;
     private boolean gameOver;
     private Player startingPlayer;
     private int player1Wins;
     private int player2Wins;
-    private List<GameObserver> observers;
-    private GameType gameType;
-    private BoardFactory factory = new BoardFactory();
+    private final List<GameObserver> observers;
+    private final GameType gameType;
+    private final BoardFactory factory = new BoardFactory();
 
     public TicTacToe(Player player1, Player player2, GameType type) {
         this.board = factory.createBoard(type);
@@ -47,7 +47,7 @@ public class TicTacToe {
             return false;
         }
 
-        if (checkWinner(currentPlayer.getSymbol())) {
+        if (board.getWinCondition().checkForWin(board)) {
             winner = currentPlayer;
             gameOver = true;
 
@@ -72,26 +72,6 @@ public class TicTacToe {
         } else {
             currentPlayer = player1;
         }
-    }
-
-    private boolean checkWinner(String symbol) {
-        BoardCell[][] grid = board.getGrid();
-
-        for (int i = 0; i < 3; i++) {
-            if (symbol.equals(grid[i][0]) && symbol.equals(grid[i][1]) && symbol.equals(grid[i][2])) {
-                return true;
-            }
-
-            if (symbol.equals(grid[0][i]) && symbol.equals(grid[1][i]) && symbol.equals(grid[2][i])) {
-                return true;
-            }
-        }
-
-        if (symbol.equals(grid[0][0]) && symbol.equals(grid[1][1]) && symbol.equals(grid[2][2])) {
-            return true;
-        }
-
-        return symbol.equals(grid[0][2]) && symbol.equals(grid[1][1]) && symbol.equals(grid[2][0]);
     }
 
     public Board getBoard() {

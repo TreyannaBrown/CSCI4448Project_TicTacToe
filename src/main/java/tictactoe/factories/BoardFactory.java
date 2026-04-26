@@ -2,6 +2,7 @@ package tictactoe.factories;
 
 import tictactoe.Board;
 import tictactoe.BoardCell;
+import tictactoe.WinConditions.WinCondition;
 import tictactoe.enums.GameType;
 
 import javax.swing.text.html.ListView;
@@ -12,15 +13,17 @@ public class BoardFactory {
     private static final int PYRAMID_BOARD_WIDTH = 5;
     private static final int CONNECT_FOUR_HEIGHT = 6;
     private static final int CONNECT_FOUR_WIDTH = 7;
+    private final WinConditionFactory factory = new WinConditionFactory();
     public Board createBoard(GameType type) {
+        WinCondition condition = factory.createWinCondition(type);
         if(type == GameType.STANDARD){
-            return new Board(initializeSquareBoard(STANDARD_BOARD_DIMENSIONS, STANDARD_BOARD_DIMENSIONS));
+            return new Board(initializeSquareBoard(STANDARD_BOARD_DIMENSIONS, STANDARD_BOARD_DIMENSIONS), condition);
         }
         if(type == GameType.PYRAMID){
-            return new Board(initializePyramidBoard());
+            return new Board(initializePyramidBoard(), condition);
         }
         if(type == GameType.CONNECT_FOUR){
-            return new Board(initializeSquareBoard(CONNECT_FOUR_HEIGHT, CONNECT_FOUR_WIDTH));
+            return new Board(initializeSquareBoard(CONNECT_FOUR_HEIGHT, CONNECT_FOUR_WIDTH), condition);
         }
         else{
             throw new IllegalArgumentException("Unknown game type: " + type);

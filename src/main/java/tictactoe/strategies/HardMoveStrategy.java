@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 public class HardMoveStrategy implements MoveStrategy {
-    private Random random = new Random();
+    private final Random random = new Random();
 
     @Override
     public int[] chooseMove(BoardCell[][] board) {
@@ -15,7 +15,7 @@ public class HardMoveStrategy implements MoveStrategy {
 
         for (int row = 0; row < board.length; row++) {
             for (int col = 0; col < board[row].length; col++) {
-                if (board[row][col] == null || board[row][col].isEmpty()) {
+                if (board[row][col].isValid() && board[row][col].isEmpty()) {
                     availableMoves.add(new int[]{row, col});
                 }
             }

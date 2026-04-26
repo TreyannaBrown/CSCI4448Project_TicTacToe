@@ -1,19 +1,19 @@
 package tictactoe;
 
 public class BoardCell {
-    private Boolean isValidCell;
+    private final boolean isValidCell;
     private String cellValue;
 
-    public BoardCell(Boolean isValid){
+    public BoardCell(boolean isValid){
         isValidCell = isValid;
         cellValue = null;
     }
 
-    public Boolean isValid(){
+    public boolean isValid(){
         return isValidCell;
     }
 
-    public Boolean isEmpty(){
+    public boolean isEmpty(){
         return cellValue == null;
     }
 

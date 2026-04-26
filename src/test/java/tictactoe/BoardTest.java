@@ -66,8 +66,8 @@ public class BoardTest {
 
         board.placeMove(2, 2, "O");
 
-        String[][] grid = board.getGrid();
+        BoardCell[][] grid = board.getGrid();
 
-        assertEquals("O", grid[2][2]);
+        assertEquals("O", grid[2][2].getCellValue());
     }
 }

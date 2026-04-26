@@ -1,10 +1,16 @@
 package tictactoe;
 
-public class Board {
-    private BoardCell[][] grid;
+import tictactoe.WinConditions.WinCondition;
 
-    public Board(BoardCell[][] grid){
+public class Board {
+    private final BoardCell[][] grid;
+    private Move lastMove;
+    private final WinCondition winCondition;
+
+    public Board(BoardCell[][] grid, WinCondition winCondition){
         this.grid = grid;
+        this.lastMove = null;
+        this.winCondition = winCondition;
     }
     public boolean placeMove(int row, int col, String symbol) {
         if (grid[row][col] != null) {
@@ -12,6 +18,7 @@ public class Board {
         }
 
         grid[row][col].setCellValue(symbol);
+        lastMove = new Move(row, col);
         return true;
     }
 
@@ -32,5 +39,13 @@ public class Board {
             }
         }
         return true;
+    }
+
+    public Move getLastMove(){
+        return lastMove;
+    }
+
+    public WinCondition getWinCondition(){
+        return winCondition;
     }
 }
