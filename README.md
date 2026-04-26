@@ -15,21 +15,20 @@ Run StartMenu.java to start the game.
 
 **Design Patterns Used**
 
--MVC (Model-View-Controller)
+-_MVC (Model-View-Controller)_
 
-Separates the game logic (TicTacToe, Board) from the UI (SwingTicTacToe, StartMenu).
+ Separates the game logic (TicTacToe, Board) from the UI (SwingTicTacToe, StartMenu).
 
--Observer Pattern
+-_Observer Pattern_
+ The UI updates automatically when the game state changes using GameObserver.
 
-The UI updates automatically when the game state changes using GameObserver.
+-_Strategy Pattern_
 
--Strategy Pattern
+ Different computer difficulties (Easy, Hard) are implemented using interchangeable move strategies.
 
-Different computer difficulties (Easy, Hard) are implemented using interchangeable move strategies.
+-_Factory Pattern_
 
--Factory Pattern
-
-GameFactory is used to create different game modes (Human vs Human, Human vs Computer, etc.).
+ GameFactory is used to create different game modes (Human vs Human, Human vs Computer, etc.).
 
 **Citations**
 
