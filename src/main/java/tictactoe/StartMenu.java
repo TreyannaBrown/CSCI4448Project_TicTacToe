@@ -216,12 +216,12 @@ public class StartMenu {
 
         final String[] result = {defaultName};
 
-        okButton.addActionListener(event -> {
+        okButton.addActionListener(_ -> {
             result[0] = getEnteredName(textField, defaultName);
             dialog.dispose();
         });
 
-        textField.addActionListener(event -> okButton.doClick());
+        textField.addActionListener(_ -> okButton.doClick());
 
         panel.add(label, BorderLayout.NORTH);
         panel.add(textField, BorderLayout.CENTER);
@@ -288,7 +288,7 @@ public class StartMenu {
     private JButton createThemeButton(String text, Theme theme) {
         JButton button = styledButton(text, menuTheme);
 
-        button.addActionListener(event -> {
+        button.addActionListener(_ -> {
             selectedTheme = theme;
             showBoardTypeMenu();
         });
@@ -298,7 +298,7 @@ public class StartMenu {
 
     private JButton createMenuButton(String text, Runnable action) {
         JButton button = styledButton(text, selectedTheme);
-        button.addActionListener(event -> action.run());
+        button.addActionListener(_ -> action.run());
         return button;
     }
 
