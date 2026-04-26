@@ -1,5 +1,8 @@
 package tictactoe.enums;
 
 public enum GameType {
-    STANDARD
+    STANDARD,
+    PYRAMID,
+    CONNECT_FOUR
+
 }

@@ -1,5 +1,7 @@
 package tictactoe;
 
+import tictactoe.enums.GameType;
+import tictactoe.factories.BoardFactory;
 import tictactoe.observers.GameObserver;
 import tictactoe.players.Player;
 
@@ -17,9 +19,11 @@ public class TicTacToe {
     private int player1Wins;
     private int player2Wins;
     private List<GameObserver> observers;
+    private GameType gameType;
+    private BoardFactory factory = new BoardFactory();
 
-    public TicTacToe(Player player1, Player player2) {
-        this.board = new Board();
+    public TicTacToe(Player player1, Player player2, GameType type) {
+        this.board = factory.createBoard(type);
         this.player1 = player1;
         this.player2 = player2;
         this.currentPlayer = player1;
@@ -29,6 +33,7 @@ public class TicTacToe {
         this.startingPlayer = player1;
         this.player1Wins = 0;
         this.player2Wins = 0;
+        this.gameType = type;
     }
 
     public boolean makeMove(int row, int col) {
@@ -70,7 +75,7 @@ public class TicTacToe {
     }
 
     private boolean checkWinner(String symbol) {
-        String[][] grid = board.getGrid();
+        BoardCell[][] grid = board.getGrid();
 
         for (int i = 0; i < 3; i++) {
             if (symbol.equals(grid[i][0]) && symbol.equals(grid[i][1]) && symbol.equals(grid[i][2])) {

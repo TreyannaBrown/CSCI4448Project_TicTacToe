@@ -1,5 +1,7 @@
 package tictactoe.strategies;
 
+import tictactoe.BoardCell;
+
 public interface MoveStrategy {
-    int[] chooseMove(String[][] board);
+    int[] chooseMove(BoardCell[][] board);
 }

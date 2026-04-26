@@ -1,5 +1,6 @@
 package tictactoe.players;
 
+import tictactoe.BoardCell;
 import tictactoe.strategies.MoveStrategy;
 
 public class ComputerPlayer extends Player {
@@ -15,7 +16,7 @@ public class ComputerPlayer extends Player {
         return true;
     }
 
-    public int[] getMove(String[][] board) {
+    public int[] getMove(BoardCell[][] board) {
         return moveStrategy.chooseMove(board);
     }
 }

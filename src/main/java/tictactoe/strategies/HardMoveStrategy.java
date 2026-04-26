@@ -1,5 +1,7 @@
 package tictactoe.strategies;
 
+import tictactoe.BoardCell;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -8,7 +10,7 @@ public class HardMoveStrategy implements MoveStrategy {
     private Random random = new Random();
 
     @Override
-    public int[] chooseMove(String[][] board) {
+    public int[] chooseMove(BoardCell[][] board) {
         List<int[]> availableMoves = new ArrayList<>();
 
         for (int row = 0; row < board.length; row++) {
