@@ -33,7 +33,8 @@ Run StartMenu.java to start the game.
 
 -_Factory Pattern_
 
- GameFactory is used to create different game modes (Human vs Human, Human vs Computer, etc.).
+ GameFactory is used to create different game modes (Human vs Human, Human vs Computer, etc.). 
+ BoardFactory is used to create boards of different shapes and sizes. 
 
 **Citations**
 
