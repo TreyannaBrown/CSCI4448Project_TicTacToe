@@ -10,30 +10,30 @@ import javax.swing.*;
 import java.awt.*;
 
 public class SwingTicTacToe implements GameObserver {
-    private static final int WINDOW_WIDTH = 450;
-    private static final int WINDOW_HEIGHT = 500;
+    private static final int WINDOW_WIDTH = 560;
+    private static final int WINDOW_HEIGHT = 620;
     private static final int GRID_GAP = 8;
     private static final int BOARD_PADDING = 15;
-    private static final int BUTTON_FONT_SIZE = 64;
+    private static final int BUTTON_FONT_SIZE = 48;
     private static final int BUTTON_BORDER_SIZE = 3;
     private static final int HIGHLIGHT_BORDER_SIZE = 8;
     private static final int COMPUTER_MOVE_DELAY = 800;
     private static final int GAME_OVER_DELAY = 1200;
+    private static final int SCORE_TALLY_GROUP_SIZE = 5;
 
     private final TicTacToe game;
     private final JFrame frame;
     private final JPanel boardPanel;
     private final JPanel topPanel;
-    private JButton[][] buttons;
     private final JLabel statusLabel;
     private final JLabel scoreLabel;
-
     private final Color backgroundColor;
     private final Color accentColor;
     private final Color buttonColor;
     private final Color textColor;
     private final Runnable returnToMenuAction;
 
+    private JButton[][] buttons;
     private boolean gameOverScreenShown;
 
     public SwingTicTacToe(TicTacToe game, Color backgroundColor, Color accentColor,
@@ -93,7 +93,6 @@ public class SwingTicTacToe implements GameObserver {
 
     private void buildBoardPanel() {
         BoardCell[][] grid = game.getBoard().getGrid();
-
         int rowCount = grid.length;
         int columnCount = grid[0].length;
 
@@ -110,12 +109,12 @@ public class SwingTicTacToe implements GameObserver {
         ));
 
         for (int row = 0; row < rowCount; row++) {
-            addButtonsForRow(grid, row, columnCount);
+            addButtonsForRow(grid, row);
         }
     }
 
-    private void addButtonsForRow(BoardCell[][] grid, int row, int columnCount) {
-        for (int col = 0; col < columnCount; col++) {
+    private void addButtonsForRow(BoardCell[][] grid, int row) {
+        for (int col = 0; col < grid[row].length; col++) {
             JButton button = createBoardButton(row, col, grid[row][col]);
             buttons[row][col] = button;
             boardPanel.add(button);
@@ -179,14 +178,12 @@ public class SwingTicTacToe implements GameObserver {
 
     private void makeComputerMove() {
         ComputerPlayer computer = (ComputerPlayer) game.getCurrentPlayer();
-
-        String computerSymbol = game.getCurrentPlayer().getSymbol();
-        String opponentSymbol = game.getOtherPlayer(game.getCurrentPlayer()).getSymbol();
+        Player opponent = getOpponentPlayer();
 
         int[] move = computer.getMove(
                 game.getBoard().getGrid(),
-                computerSymbol,
-                opponentSymbol
+                game.getCurrentPlayer().getSymbol(),
+                opponent.getSymbol()
         );
 
         if (move != null) {
@@ -194,6 +191,14 @@ public class SwingTicTacToe implements GameObserver {
         }
 
         handleComputerTurn();
+    }
+
+    private Player getOpponentPlayer() {
+        if (game.getCurrentPlayer() == game.getPlayer1()) {
+            return game.getPlayer2();
+        }
+
+        return game.getPlayer1();
     }
 
     @Override
@@ -238,8 +243,7 @@ public class SwingTicTacToe implements GameObserver {
             return;
         }
 
-        Player currentPlayer = game.getCurrentPlayer();
-        statusLabel.setText(currentPlayer.getName() + "'s turn");
+        statusLabel.setText(game.getCurrentPlayer().getName() + "'s turn");
     }
 
     private void updateGameOverStatus() {
@@ -264,7 +268,7 @@ public class SwingTicTacToe implements GameObserver {
         for (int tallyNumber = 1; tallyNumber <= count; tallyNumber++) {
             tallies.append("|");
 
-            if (tallyNumber % 5 == 0) {
+            if (tallyNumber % SCORE_TALLY_GROUP_SIZE == 0) {
                 tallies.append(" ");
             }
         }
@@ -285,7 +289,7 @@ public class SwingTicTacToe implements GameObserver {
     }
 
     private void highlightWinningCells() {
-        int[][] winningCells = game.getWinningCells();
+        int[][] winningCells = game.getBoard().getWinningCells();
 
         if (winningCells == null) {
             return;
@@ -294,19 +298,6 @@ public class SwingTicTacToe implements GameObserver {
         for (int[] cell : winningCells) {
             highlightCell(cell);
         }
-    }
-
-    private void highlightCell(int[] cell) {
-        int row = cell[0];
-        int col = cell[1];
-
-        if (!isButtonInBounds(row, col)) {
-            return;
-        }
-
-        buttons[row][col].setBorder(BorderFactory.createLineBorder(Color.YELLOW, HIGHLIGHT_BORDER_SIZE));
-        buttons[row][col].setBackground(accentColor);
-        buttons[row][col].setForeground(backgroundColor);
     }
 
     private boolean isButtonInBounds(int row, int col) {
@@ -321,11 +312,8 @@ public class SwingTicTacToe implements GameObserver {
         gameOverPanel.setBackground(backgroundColor);
         gameOverPanel.setBorder(BorderFactory.createEmptyBorder(60, 40, 60, 40));
 
-        JLabel messageLabel = createGameOverMessageLabel();
-        JPanel buttonPanel = createGameOverButtonPanel();
-
-        gameOverPanel.add(messageLabel, BorderLayout.CENTER);
-        gameOverPanel.add(buttonPanel, BorderLayout.SOUTH);
+        gameOverPanel.add(createGameOverMessageLabel(), BorderLayout.CENTER);
+        gameOverPanel.add(createGameOverButtonPanel(), BorderLayout.SOUTH);
 
         frame.getContentPane().removeAll();
         frame.add(gameOverPanel, BorderLayout.CENTER);
@@ -407,4 +395,19 @@ public class SwingTicTacToe implements GameObserver {
         button.setBorder(BorderFactory.createLineBorder(accentColor, BUTTON_BORDER_SIZE));
         return button;
     }
+    private void highlightCell(int[] cell) {
+        int row = cell[0];
+        int col = cell[1];
+
+        if (!isButtonInBounds(row, col)) {
+            return;
+        }
+
+        buttons[row][col].setBorder(
+                BorderFactory.createLineBorder(Color.YELLOW, HIGHLIGHT_BORDER_SIZE)
+        );
+        buttons[row][col].setBackground(accentColor);
+        buttons[row][col].setForeground(backgroundColor);
+    }
+
 }

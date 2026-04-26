@@ -9,11 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class TicTacToe {
-    private static final int STANDARD_BOARD_SIZE = 3;
-    private static final int FIRST_INDEX = 0;
-    private static final int SECOND_INDEX = 1;
-    private static final int THIRD_INDEX = 2;
-
     private final Player player1;
     private final Player player2;
     private final GameType gameType;
@@ -27,7 +22,6 @@ public class TicTacToe {
     private boolean gameOver;
     private int player1Wins;
     private int player2Wins;
-    private int[][] winningCells;
 
     public TicTacToe(Player player1, Player player2, GameType gameType) {
         this.player1 = player1;
@@ -51,9 +45,8 @@ public class TicTacToe {
     }
 
     public void resetGame() {
-        Player nextStartingPlayer = getOtherPlayer(startingPlayer);
-        startingPlayer = nextStartingPlayer;
-        resetBoardState(nextStartingPlayer);
+        startingPlayer = getOtherPlayer(startingPlayer);
+        resetBoardState(startingPlayer);
         notifyObservers();
     }
 
@@ -93,9 +86,8 @@ public class TicTacToe {
         return player2Wins;
     }
 
-
-    public int[][] getWinningCells() {
-        return winningCells;
+    public Player getOtherPlayer(Player player) {
+        return player == player1 ? player2 : player1;
     }
 
     private void resetBoardState(Player firstPlayer) {
@@ -103,22 +95,16 @@ public class TicTacToe {
         currentPlayer = firstPlayer;
         winner = null;
         gameOver = false;
-        winningCells = null;
     }
 
     private void updateGameState() {
-        if (hasCurrentPlayerWon()) {
+        if (board.getWinCondition().checkForWin(board)) {
             handleWin();
         } else if (board.isFull()) {
             gameOver = true;
         } else {
             currentPlayer = getOtherPlayer(currentPlayer);
         }
-    }
-
-    private boolean hasCurrentPlayerWon() {
-        String symbol = currentPlayer.getSymbol();
-        return checkRows(symbol) || checkColumns(symbol) || checkDiagonals(symbol);
     }
 
     private void handleWin() {
@@ -133,70 +119,6 @@ public class TicTacToe {
         } else {
             player2Wins++;
         }
-    }
-
-    public Player getOtherPlayer(Player player) {
-        return player == player1 ? player2 : player1;
-    }
-
-    private boolean checkRows(String symbol) {
-        BoardCell[][] grid = board.getGrid();
-
-        for (int row = 0; row < STANDARD_BOARD_SIZE; row++) {
-            if (matches(symbol, grid[row][FIRST_INDEX], grid[row][SECOND_INDEX], grid[row][THIRD_INDEX])) {
-                winningCells = new int[][]{{row, FIRST_INDEX}, {row, SECOND_INDEX}, {row, THIRD_INDEX}};
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private boolean checkColumns(String symbol) {
-        BoardCell[][] grid = board.getGrid();
-
-        for (int col = 0; col < STANDARD_BOARD_SIZE; col++) {
-            if (matches(symbol, grid[FIRST_INDEX][col], grid[SECOND_INDEX][col], grid[THIRD_INDEX][col])) {
-                winningCells = new int[][]{{FIRST_INDEX, col}, {SECOND_INDEX, col}, {THIRD_INDEX, col}};
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    private boolean checkDiagonals(String symbol) {
-        return checkLeftDiagonal(symbol) || checkRightDiagonal(symbol);
-    }
-
-    private boolean checkLeftDiagonal(String symbol) {
-        BoardCell[][] grid = board.getGrid();
-
-        if (!matches(symbol, grid[FIRST_INDEX][FIRST_INDEX], grid[SECOND_INDEX][SECOND_INDEX],
-                grid[THIRD_INDEX][THIRD_INDEX])) {
-            return false;
-        }
-
-        winningCells = new int[][]{{FIRST_INDEX, FIRST_INDEX}, {SECOND_INDEX, SECOND_INDEX}, {THIRD_INDEX, THIRD_INDEX}};
-        return true;
-    }
-
-    private boolean checkRightDiagonal(String symbol) {
-        BoardCell[][] grid = board.getGrid();
-
-        if (!matches(symbol, grid[FIRST_INDEX][THIRD_INDEX], grid[SECOND_INDEX][SECOND_INDEX],
-                grid[THIRD_INDEX][FIRST_INDEX])) {
-            return false;
-        }
-
-        winningCells = new int[][]{{FIRST_INDEX, THIRD_INDEX}, {SECOND_INDEX, SECOND_INDEX}, {THIRD_INDEX, FIRST_INDEX}};
-        return true;
-    }
-
-    private boolean matches(String symbol, BoardCell firstCell, BoardCell secondCell, BoardCell thirdCell) {
-        return symbol.equals(firstCell.getCellValue())
-                && symbol.equals(secondCell.getCellValue())
-                && symbol.equals(thirdCell.getCellValue());
     }
 
     private void notifyObservers() {

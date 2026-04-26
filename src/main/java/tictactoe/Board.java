@@ -1,18 +1,28 @@
 package tictactoe;
 
+import tictactoe.WinConditions.WinCondition;
+
 public class Board {
     private final BoardCell[][] grid;
+    private final WinCondition winCondition;
 
-    public Board(BoardCell[][] grid) {
+    private Move lastMove;
+    private int[][] winningCells;
+
+    public Board(BoardCell[][] grid, WinCondition winCondition) {
         this.grid = grid;
+        this.winCondition = winCondition;
+        this.lastMove = null;
+        this.winningCells = null;
     }
 
     public boolean placeMove(int row, int col, String symbol) {
-        if (!isInBounds(row, col) || !grid[row][col].isValid() || !grid[row][col].isEmpty()) {
+        if (!grid[row][col].isValid() || !grid[row][col].isEmpty()) {
             return false;
         }
 
         grid[row][col].setCellValue(symbol);
+        lastMove = new Move(row, col);
         return true;
     }
 
@@ -25,9 +35,9 @@ public class Board {
     }
 
     public boolean isFull() {
-        for (BoardCell[] row : grid) {
-            for (BoardCell cell : row) {
-                if (cell.isValid() && cell.isEmpty()) {
+        for (BoardCell[] boardCells : grid) {
+            for (BoardCell boardCell : boardCells) {
+                if (boardCell.isValid() && boardCell.isEmpty()) {
                     return false;
                 }
             }
@@ -36,7 +46,19 @@ public class Board {
         return true;
     }
 
-    private boolean isInBounds(int row, int col) {
-        return row >= 0 && row < grid.length && col >= 0 && col < grid[row].length;
+    public Move getLastMove() {
+        return lastMove;
+    }
+
+    public WinCondition getWinCondition() {
+        return winCondition;
+    }
+
+    public int[][] getWinningCells() {
+        return winningCells;
+    }
+
+    public void setWinningCells(int[][] winningCells) {
+        this.winningCells = winningCells;
     }
 }

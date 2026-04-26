@@ -7,8 +7,8 @@ public class FourInARowWin implements WinCondition {
     private static final int WIN_LENGTH = 4;
 
     @Override
-    public boolean checkForWin(Board board){
-        if(board.getLastMove() == null){
+    public boolean checkForWin(Board board) {
+        if (board.getLastMove() == null) {
             return false;
         }
 
@@ -16,34 +16,76 @@ public class FourInARowWin implements WinCondition {
         int col = board.getLastMove().column();
         String symbol = board.getValue(row, col);
 
-        return(checkLine(board, row, col, symbol, 0, 1)   // horizontal
-                || checkLine(board, row, col, symbol, 1, 0)   // vertical
-                || checkLine(board, row, col, symbol, 1, 1)   // diagonal \ (column increment is down)
-                || checkLine(board, row, col, symbol, 1, -1)); // diagonal /
+        return checkLine(board, row, col, symbol, 0, 1)
+                || checkLine(board, row, col, symbol, 1, 0)
+                || checkLine(board, row, col, symbol, 1, 1)
+                || checkLine(board, row, col, symbol, 1, -1);
     }
 
-    private boolean checkLine(Board board, int row, int col, String symbol, int rowIncrement, int colIncrement) {
-        int count = 1; //last placed symbol already counts for 1
+    private boolean checkLine(Board board, int row, int col, String symbol,
+                              int rowIncrement, int colIncrement) {
+        int[][] cells = new int[WIN_LENGTH][2];
+        int count = collectWinningCells(board, row, col, symbol, rowIncrement, colIncrement, cells);
 
-        count += countMatches(board, row, col, symbol, rowIncrement, colIncrement);
-        count += countMatches(board, row, col, symbol, -rowIncrement, -colIncrement);
+        if (count >= WIN_LENGTH) {
+            board.setWinningCells(cells);
+            return true;
+        }
 
-        return (count >= WIN_LENGTH);
+        return false;
     }
 
-    private int countMatches(Board board, int row, int col, String symbol, int rowStep, int colStep) {
-        int count = 0;
+    private int collectWinningCells(Board board, int row, int col, String symbol,
+                                    int rowIncrement, int colIncrement, int[][] cells) {
+        cells[0] = new int[]{row, col};
+
+        int count = 1;
+
+        count = collectDirection(
+                board,
+                row + rowIncrement,
+                col + colIncrement,
+                symbol,
+                rowIncrement,
+                colIncrement,
+                cells,
+                count
+        );
+
+        count = collectDirection(
+                board,
+                row - rowIncrement,
+                col - colIncrement,
+                symbol,
+                -rowIncrement,
+                -colIncrement,
+                cells,
+                count
+        );
+
+        return count;
+    }
+
+    private int collectDirection(Board board, int row, int col, String symbol,
+                                 int rowStep, int colStep, int[][] cells, int count) {
         BoardCell[][] grid = board.getGrid();
 
-        row += rowStep;
-        col += colStep;
-
-        while(row >= 0 && row < grid.length && col >= 0 && col < grid[row].length && grid[row][col].isValid() && symbol.equals(grid[row][col].getCellValue())){
+        while (count < WIN_LENGTH && isMatchingCell(grid, row, col, symbol)) {
+            cells[count] = new int[]{row, col};
             count++;
             row += rowStep;
             col += colStep;
         }
 
         return count;
+    }
+
+    private boolean isMatchingCell(BoardCell[][] grid, int row, int col, String symbol) {
+        return row >= 0
+                && row < grid.length
+                && col >= 0
+                && col < grid[row].length
+                && grid[row][col].isValid()
+                && symbol.equals(grid[row][col].getCellValue());
     }
 }

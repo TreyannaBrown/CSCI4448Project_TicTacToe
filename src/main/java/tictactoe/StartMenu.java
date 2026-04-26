@@ -15,7 +15,7 @@ public class StartMenu {
     private static final int WINDOW_HEIGHT = 680;
     private static final int NAME_DIALOG_WIDTH = 320;
     private static final int NAME_DIALOG_HEIGHT = 190;
-    private GameType selectedGameType;
+
     private static final int TITLE_FONT_SIZE = 46;
     private static final int PAGE_TITLE_FONT_SIZE = 34;
     private static final int SUBTITLE_FONT_SIZE = 18;
@@ -23,6 +23,7 @@ public class StartMenu {
     private static final int NAME_LABEL_FONT_SIZE = 16;
     private static final int DEFAULT_PADDING = 45;
     private static final int NAME_DIALOG_PADDING = 20;
+    private static final int MENU_GAP = 24;
 
     private static final String GAME_TITLE = "Tic Tac Toe";
     private static final String TITLE_TEXT = "TIC TAC TOE";
@@ -35,6 +36,7 @@ public class StartMenu {
 
     private Theme selectedTheme;
     private MoveStrategy selectedStrategy;
+    private GameType selectedGameType;
     private String player1Name;
     private String player2Name;
 
@@ -74,16 +76,46 @@ public class StartMenu {
         setPanel(panel);
     }
 
+    private void showBoardTypeMenu() {
+        JPanel panel = createBasePanel(selectedTheme);
+        JPanel titlePanel = createTitlePanel(
+                "CHOOSE BOARD",
+                "Selected Theme: " + selectedTheme.name,
+                selectedTheme,
+                PAGE_TITLE_FONT_SIZE
+        );
+        JPanel buttonPanel = createButtonPanel(BoardCatalog.values().length + 1);
+
+        for (BoardChoice boardChoice : BoardCatalog.values()) {
+            buttonPanel.add(createMenuButton(boardChoice.displayName, () -> selectBoardType(boardChoice.gameType)));
+        }
+
+        buttonPanel.add(createMenuButton("Back to Themes", this::showThemeMenu));
+
+        panel.add(titlePanel, BorderLayout.NORTH);
+        panel.add(buttonPanel, BorderLayout.CENTER);
+        setPanel(panel);
+    }
+
+    private void selectBoardType(GameType gameType) {
+        selectedGameType = gameType;
+        showGameMenu();
+    }
+
     private void showGameMenu() {
         JPanel panel = createBasePanel(selectedTheme);
-        JPanel titlePanel = createTitlePanel("CHOOSE GAME MODE",
-                "Selected Theme: " + selectedTheme.name, selectedTheme, PAGE_TITLE_FONT_SIZE);
+        JPanel titlePanel = createTitlePanel(
+                "CHOOSE GAME MODE",
+                "Selected Board: " + selectedGameType,
+                selectedTheme,
+                PAGE_TITLE_FONT_SIZE
+        );
         JPanel buttonPanel = createButtonPanel(4);
 
         buttonPanel.add(createMenuButton("Human vs Human", this::startHumanVsHumanGame));
         buttonPanel.add(createMenuButton("Human vs Computer", this::showHumanVsComputerSetup));
         buttonPanel.add(createMenuButton("Computer vs Computer", this::startComputerVsComputerGame));
-        buttonPanel.add(createMenuButton("Back to Themes", this::showThemeMenu));
+        buttonPanel.add(createMenuButton("Back to Boards", this::showBoardTypeMenu));
 
         panel.add(titlePanel, BorderLayout.NORTH);
         panel.add(buttonPanel, BorderLayout.CENTER);
@@ -97,8 +129,12 @@ public class StartMenu {
 
     private void showDifficultyMenu() {
         JPanel panel = createBasePanel(selectedTheme);
-        JPanel titlePanel = createTitlePanel("CHOOSE DIFFICULTY",
-                "Then choose your icon", selectedTheme, PAGE_TITLE_FONT_SIZE);
+        JPanel titlePanel = createTitlePanel(
+                "CHOOSE DIFFICULTY",
+                "Then choose your icon",
+                selectedTheme,
+                PAGE_TITLE_FONT_SIZE
+        );
         JPanel buttonPanel = createButtonPanel(3);
 
         buttonPanel.add(createMenuButton("Easy", () -> chooseStrategyAndShowIcons(new EasyMoveStrategy())));
@@ -117,8 +153,12 @@ public class StartMenu {
 
     private void showIconMenu() {
         JPanel panel = createBasePanel(selectedTheme);
-        JPanel titlePanel = createTitlePanel("CHOOSE YOUR ICON",
-                COMPUTER_NAME + " gets the other icon", selectedTheme, PAGE_TITLE_FONT_SIZE);
+        JPanel titlePanel = createTitlePanel(
+                "CHOOSE YOUR ICON",
+                COMPUTER_NAME + " gets the other icon",
+                selectedTheme,
+                PAGE_TITLE_FONT_SIZE
+        );
         JPanel buttonPanel = createButtonPanel(3);
 
         String firstIcon = selectedTheme.icons[0];
@@ -144,7 +184,8 @@ public class StartMenu {
                 player2Name,
                 selectedTheme.icons[0],
                 selectedTheme.icons[1],
-                selectedGameType        ));
+                selectedGameType
+        ));
     }
 
     private void startHumanVsComputerGame(String humanIcon, String computerIcon) {
@@ -153,14 +194,16 @@ public class StartMenu {
                 humanIcon,
                 computerIcon,
                 selectedStrategy,
-                selectedGameType        ));
+                selectedGameType
+        ));
     }
 
     private void startComputerVsComputerGame() {
         startGame(GameFactory.createComputerVsComputer(
                 selectedTheme.icons[0],
                 selectedTheme.icons[1],
-                selectedGameType        ));
+                selectedGameType
+        ));
     }
 
     private String askForName(String prompt, String defaultName) {
@@ -253,42 +296,6 @@ public class StartMenu {
         return button;
     }
 
-    private void showBoardTypeMenu() {
-        JPanel panel = createBasePanel(selectedTheme);
-
-        JLabel title = createTitle("CHOOSE BOARD", selectedTheme, 34);
-        JLabel subtitle = createSubtitle("Selected Theme: " + selectedTheme.name, selectedTheme);
-
-        JPanel titlePanel = new JPanel(new GridLayout(2, 1, 0, 8));
-        titlePanel.setOpaque(false);
-        titlePanel.add(title);
-        titlePanel.add(subtitle);
-
-        JPanel buttonPanel = createButtonPanel(4);
-
-        buttonPanel.add(createMenuButton("Standard 3x3", () -> {
-            selectedGameType = GameType.STANDARD;
-            showGameMenu();
-        }));
-
-        buttonPanel.add(createMenuButton("Pyramid", () -> {
-            selectedGameType = GameType.PYRAMID;
-            showGameMenu();
-        }));
-
-        buttonPanel.add(createMenuButton("Connect Four", () -> {
-            selectedGameType = GameType.CONNECT_FOUR;
-            showGameMenu();
-        }));
-
-        buttonPanel.add(createMenuButton("Back to Themes", this::showThemeMenu));
-
-        panel.add(titlePanel, BorderLayout.NORTH);
-        panel.add(buttonPanel, BorderLayout.CENTER);
-
-        setPanel(panel);
-    }
-
     private JButton createMenuButton(String text, Runnable action) {
         JButton button = styledButton(text, selectedTheme);
         button.addActionListener(event -> action.run());
@@ -329,7 +336,7 @@ public class StartMenu {
     }
 
     private JPanel createButtonPanel(int rows) {
-        JPanel buttonPanel = new JPanel(new GridLayout(rows, 1, 0, 24));
+        JPanel buttonPanel = new JPanel(new GridLayout(rows, 1, 0, MENU_GAP));
         buttonPanel.setOpaque(false);
         return buttonPanel;
     }
@@ -354,11 +361,9 @@ public class StartMenu {
         button.setFont(new Font("Dialog", Font.BOLD, BUTTON_FONT_SIZE));
         button.setForeground(theme.text);
         button.setBackground(theme.button);
-
         button.setOpaque(true);
         button.setContentAreaFilled(true);
         button.setBorderPainted(true);
-
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(theme.accent, 3));
         button.setCursor(new Cursor(Cursor.HAND_CURSOR));
@@ -426,6 +431,26 @@ public class StartMenu {
 
         private static Theme[] values() {
             return new Theme[]{PINK, DARK, NEON};
+        }
+    }
+
+    private static class BoardCatalog {
+        private static final BoardChoice STANDARD = new BoardChoice("Standard 3x3", GameType.STANDARD);
+        private static final BoardChoice PYRAMID = new BoardChoice("Pyramid", GameType.PYRAMID);
+        private static final BoardChoice CONNECT_FOUR = new BoardChoice("Connect Four", GameType.CONNECT_FOUR);
+
+        private static BoardChoice[] values() {
+            return new BoardChoice[]{STANDARD, PYRAMID, CONNECT_FOUR};
+        }
+    }
+
+    private static class BoardChoice {
+        private final String displayName;
+        private final GameType gameType;
+
+        private BoardChoice(String displayName, GameType gameType) {
+            this.displayName = displayName;
+            this.gameType = gameType;
         }
     }
 
