@@ -1,26 +1,42 @@
-# CSCI4448Project_TicTacToe
+# Tic Tac Toe
 Object-Oriented Programming Project 
 
 Group Members: Derek Marraudino, Treyanna Brown 
 
-**Project Description**
+**Project Overview**
 
-Tic-Tac-Toe is a classic game played by people of all ages around the world! We will apply Object-Oriented Programming fundamentals to program a fun interractive game. 
+Tic-Tac-Toe is a classic strategy game played by people of all ages. This project implements the game using Java Swing with a focus on object-oriented design and clean architecture. The application allows users to select different visual themes, choose between multiple game modes, and play against either another player or a computer opponent with varying difficulty levels.
 
-**Mid Project Review Description**
+Players can enter custom names, view real-time score tracking, and replay games with alternating starting turns. The project emphasizes both user experience and maintainable, well-structured code.
 
-Three Design Patterns:
-The first pattern used is within the SwingTicTacToe class. This uses a type of observer pattern because it is dependent upon input clicks from the user. When a button is clicked, the listener responds. The second design pattern will be in the CheckWinCondition class. The class will utilize the Strategy Pattern to check the different kind of win conditions that can be met, this would be used when different variations of the game are played. The third design pattern will be the Factory Pattern, this will be used to create different board sizes and configurations.
+**Java Version**
 
-Core OO Principles: 
-Our project invokes polymorphism within our Player classes. We have implemented a Player super class and two subclasses; computer player and human player. This allows the UI to determine player type upon each players turn and handle the situations differently while simultaneously keeping things DRY by having most methods within the super class. This is also an example of coding to an abstraction since the TicTacToe class does't need to know what the player type is to execute. Dependency Injection will be applied once we are further in the project with player and possibly board injections. 
+25
 
-Tests:
-During this project we have chosen to follow Test Driven Development (TDD) to make sure we are actually developing useful methodology that will execute as expected. 
+**How To Run**
 
+Run StartMenu.java to start the game. 
 
+**Design Patterns Used**
 
+-_MVC (Model-View-Controller)_
 
+ Separates the game logic (TicTacToe, Board) from the UI (SwingTicTacToe, StartMenu).
 
+-_Observer Pattern_
 
-Ideas : players can pick different icons, player vs player, player vs computer, add a reset button, best of __, scoreboard. 
+ The UI updates automatically when the game state changes using GameObserver.
+
+-_Strategy Pattern_
+
+ Different computer difficulties (Easy, Hard) are implemented using interchangeable move strategies.
+
+-_Factory Pattern_
+
+ GameFactory is used to create different game modes (Human vs Human, Human vs Computer, etc.). 
+ BoardFactory is used to create boards of different shapes and sizes. 
+
+**Citations**
+
+OpenAI ChatGPT was used to assist with the initial UI skeleton and layout design; all logic and integration were implemented independently.
+ 
