@@ -10,8 +10,8 @@ public class BoardFactory {
     private static final int STANDARD_BOARD_DIMENSIONS = 3;
     private static final int PYRAMID_BOARD_HEIGHT = 3;
     private static final int PYRAMID_BOARD_WIDTH = 5;
-    private static final int CONNECT_FOUR_HEIGHT = 6;
-    private static final int CONNECT_FOUR_WIDTH = 7;
+    private static final int CONNECT_FOUR_HEIGHT = 4;
+    private static final int CONNECT_FOUR_WIDTH = 4;
     public Board createBoard(GameType type) {
         if(type == GameType.STANDARD){
             return new Board(initializeSquareBoard(STANDARD_BOARD_DIMENSIONS, STANDARD_BOARD_DIMENSIONS));

@@ -14,7 +14,7 @@ public class GameFactory {
         Player player1 = new HumanPlayer(player1Name, icon1);
         Player player2 = new HumanPlayer(player2Name, icon2);
 
-        return new TicTacToe(player1, player2,type);
+        return new TicTacToe(player1, player2, type);
     }
 
     public static TicTacToe createHumanVsComputer(String playerName, String humanIcon, String computerIcon, MoveStrategy strategy, GameType type) {

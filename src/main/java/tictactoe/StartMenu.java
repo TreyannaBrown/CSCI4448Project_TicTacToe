@@ -1,5 +1,6 @@
 package tictactoe;
 
+import tictactoe.enums.GameType;
 import tictactoe.factories.GameFactory;
 import tictactoe.strategies.EasyMoveStrategy;
 import tictactoe.strategies.HardMoveStrategy;
@@ -14,7 +15,7 @@ public class StartMenu {
     private static final int WINDOW_HEIGHT = 680;
     private static final int NAME_DIALOG_WIDTH = 320;
     private static final int NAME_DIALOG_HEIGHT = 190;
-
+    private GameType selectedGameType;
     private static final int TITLE_FONT_SIZE = 46;
     private static final int PAGE_TITLE_FONT_SIZE = 34;
     private static final int SUBTITLE_FONT_SIZE = 18;
@@ -142,8 +143,8 @@ public class StartMenu {
                 player1Name,
                 player2Name,
                 selectedTheme.icons[0],
-                selectedTheme.icons[1]
-        ));
+                selectedTheme.icons[1],
+                selectedGameType        ));
     }
 
     private void startHumanVsComputerGame(String humanIcon, String computerIcon) {
@@ -151,15 +152,15 @@ public class StartMenu {
                 player1Name,
                 humanIcon,
                 computerIcon,
-                selectedStrategy
-        ));
+                selectedStrategy,
+                selectedGameType        ));
     }
 
     private void startComputerVsComputerGame() {
         startGame(GameFactory.createComputerVsComputer(
                 selectedTheme.icons[0],
-                selectedTheme.icons[1]
-        ));
+                selectedTheme.icons[1],
+                selectedGameType        ));
     }
 
     private String askForName(String prompt, String defaultName) {
@@ -246,10 +247,46 @@ public class StartMenu {
 
         button.addActionListener(event -> {
             selectedTheme = theme;
-            showGameMenu();
+            showBoardTypeMenu();
         });
 
         return button;
+    }
+
+    private void showBoardTypeMenu() {
+        JPanel panel = createBasePanel(selectedTheme);
+
+        JLabel title = createTitle("CHOOSE BOARD", selectedTheme, 34);
+        JLabel subtitle = createSubtitle("Selected Theme: " + selectedTheme.name, selectedTheme);
+
+        JPanel titlePanel = new JPanel(new GridLayout(2, 1, 0, 8));
+        titlePanel.setOpaque(false);
+        titlePanel.add(title);
+        titlePanel.add(subtitle);
+
+        JPanel buttonPanel = createButtonPanel(4);
+
+        buttonPanel.add(createMenuButton("Standard 3x3", () -> {
+            selectedGameType = GameType.STANDARD;
+            showGameMenu();
+        }));
+
+        buttonPanel.add(createMenuButton("Pyramid", () -> {
+            selectedGameType = GameType.PYRAMID;
+            showGameMenu();
+        }));
+
+        buttonPanel.add(createMenuButton("Connect Four", () -> {
+            selectedGameType = GameType.CONNECT_FOUR;
+            showGameMenu();
+        }));
+
+        buttonPanel.add(createMenuButton("Back to Themes", this::showThemeMenu));
+
+        panel.add(titlePanel, BorderLayout.NORTH);
+        panel.add(buttonPanel, BorderLayout.CENTER);
+
+        setPanel(panel);
     }
 
     private JButton createMenuButton(String text, Runnable action) {

@@ -1,13 +1,14 @@
 package tictactoe;
 
 public class Board {
-    private BoardCell[][] grid;
+    private final BoardCell[][] grid;
 
-    public Board(BoardCell[][] grid){
+    public Board(BoardCell[][] grid) {
         this.grid = grid;
     }
+
     public boolean placeMove(int row, int col, String symbol) {
-        if (grid[row][col] != null) {
+        if (!isInBounds(row, col) || !grid[row][col].isValid() || !grid[row][col].isEmpty()) {
             return false;
         }
 
@@ -24,13 +25,18 @@ public class Board {
     }
 
     public boolean isFull() {
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < 3; col++) {
-                if (grid[row][col].getCellValue() == null) {
+        for (BoardCell[] row : grid) {
+            for (BoardCell cell : row) {
+                if (cell.isValid() && cell.isEmpty()) {
                     return false;
                 }
             }
         }
+
         return true;
+    }
+
+    private boolean isInBounds(int row, int col) {
+        return row >= 0 && row < grid.length && col >= 0 && col < grid[row].length;
     }
 }
