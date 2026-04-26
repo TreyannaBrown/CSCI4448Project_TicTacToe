@@ -20,6 +20,7 @@ Run StartMenu.java to start the game.
  Separates the game logic (TicTacToe, Board) from the UI (SwingTicTacToe, StartMenu).
 
 -_Observer Pattern_
+
  The UI updates automatically when the game state changes using GameObserver.
 
 -_Strategy Pattern_
