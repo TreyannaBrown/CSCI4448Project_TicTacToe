@@ -14,13 +14,20 @@ Tic-Tac-Toe is a classic game played by people of all ages around the world! Thi
 Run StartMenu.java to start the game. 
 
 **Design Patterns Used**
-MVC (Model-View-Controller)
+-MVC (Model-View-Controller)
+
 Separates the game logic (TicTacToe, Board) from the UI (SwingTicTacToe, StartMenu).
-Observer Pattern
+
+-Observer Pattern
+
 The UI updates automatically when the game state changes using GameObserver.
-Strategy Pattern
+
+-Strategy Pattern
+
 Different computer difficulties (Easy, Hard) are implemented using interchangeable move strategies.
-Factory Pattern
+
+-Factory Pattern
+
 GameFactory is used to create different game modes (Human vs Human, Human vs Computer, etc.).
 
 **Citations**
