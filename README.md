@@ -8,7 +8,9 @@ Group Members: Derek Marraudino, Treyanna Brown
 Tic-Tac-Toe is a classic game played by people of all ages around the world! This project is a Java Swing Tic Tac Toe game with multiple themes, game modes, and computer difficulty levels. Players can enter their names, play against another player or the computer, and replay games while tracking wins. 
 
 **Java Version**
+
 25
+
 **How To Run**
 
 Run StartMenu.java to start the game. 
