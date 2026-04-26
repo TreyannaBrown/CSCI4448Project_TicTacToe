@@ -1,36 +1,38 @@
 package tictactoe;
 
 import org.junit.jupiter.api.Test;
+import tictactoe.WinConditions.ThreeInARowWin;
+import tictactoe.enums.GameType;
+import tictactoe.factories.BoardFactory;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 public class BoardTest {
-    private static final int BOARD_SIZE = 3;
-
+    private final BoardFactory boardFactory = new BoardFactory();
     @Test
-    public void testBoardStartsEmpty() {
-        Board board = createStandardBoard();
-
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
-                assertNull(board.getValue(row, col));
+    public void testBoardStartsEmpty(){
+        Board board = boardFactory.createBoard(GameType.STANDARD);
+        BoardCell[][] boardGrid = board.getGrid();
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                assertNull(boardGrid[row][col].getCellValue());
             }
         }
     }
 
     @Test
-    public void testPlaceMoveOnEmptySpot() {
-        Board board = createStandardBoard();
-
+    public void testPlaceMoveOnEmptySpot(){
+        Board board = boardFactory.createBoard(GameType.STANDARD);
+        BoardCell[][] boardGrid = board.getGrid();
         boolean movePlaced = board.placeMove(0, 0, "X");
 
         assertTrue(movePlaced);
-        assertEquals("X", board.getValue(0, 0));
+        assertEquals("X", boardGrid[0][0].getCellValue());
     }
 
     @Test
-    public void testCannotPlaceMoveOnOccupiedSpot() {
-        Board board = createStandardBoard();
+    public void testCannotPlaceMoveOnOccupiedSpot(){
+        Board board = boardFactory.createBoard(GameType.STANDARD);
 
         board.placeMove(1, 1, "X");
         boolean secondMovePlaced = board.placeMove(1, 1, "O");
@@ -40,19 +42,19 @@ public class BoardTest {
     }
 
     @Test
-    public void testBoardIsNotFullAtStart() {
-        Board board = createStandardBoard();
-
+    public void testBoardIsNotFullAtStart(){
+        Board board = boardFactory.createBoard(GameType.STANDARD);
         assertFalse(board.isFull());
     }
 
     @Test
-    public void testBoardIsFullAfterAllSpacesFilled() {
-        Board board = createStandardBoard();
+    public void testBoardIsFullAfterAllSpacesFilled(){
+        Board board = boardFactory.createBoard(GameType.STANDARD);
+        String symbol = "X";
 
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
-                board.placeMove(row, col, "X");
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                board.placeMove(row, col, symbol);
             }
         }
 
@@ -60,42 +62,64 @@ public class BoardTest {
     }
 
     @Test
-    public void testGetGridReturnsPlacedValues() {
-        Board board = createStandardBoard();
+    public void testGetGridReturnsPlacedValues(){
+        Board board = boardFactory.createBoard(GameType.STANDARD);
 
         board.placeMove(2, 2, "O");
 
-        BoardCell[][] grid = board.getGrid();
-
-        assertEquals("O", grid[2][2].getCellValue());
+        assertEquals("O", board.getValue(2,2));
     }
 
     @Test
-    public void testCannotPlaceMoveOnInvalidCell() {
-        BoardCell[][] grid = createStandardGrid();
-        grid[0][0] = new BoardCell(false);
-
-        Board board = new Board(grid);
-
-        boolean movePlaced = board.placeMove(0, 0, "X");
-
-        assertFalse(movePlaced);
-        assertNull(board.getValue(0, 0));
+    public void testPlaceInInvalidSpace(){
+        Board board = boardFactory.createBoard(GameType.PYRAMID);
+        boolean placeValue = board.placeMove(0,0,"X");
+        assertFalse(placeValue);
+        assertNull(board.getValue(0,0));
     }
 
-    private Board createStandardBoard() {
-        return new Board(createStandardGrid());
+    @Test
+    public void testGetLastMove(){
+        Board board = boardFactory.createBoard(GameType.STANDARD);
+        Move placedMove = new Move(0,0);
+        board.placeMove(placedMove.row(), placedMove.column(), "X");
+        Move lastMove = board.getLastMove();
+
+        assertEquals(placedMove,lastMove);
     }
 
-    private BoardCell[][] createStandardGrid() {
-        BoardCell[][] grid = new BoardCell[BOARD_SIZE][BOARD_SIZE];
+    @Test
+    public void testGetWinStrategy(){
+        Board board = boardFactory.createBoard(GameType.STANDARD);
 
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
-                grid[row][col] = new BoardCell(true);
+        assertInstanceOf(ThreeInARowWin.class, board.getWinCondition());
+    }
+
+
+    private boolean containsCell(int[][] cells, int row, int col) { //helper for following test
+        for(int[] cell : cells){
+            if(cell[0] == row && cell[1] == col){
+                return true;
             }
         }
-
-        return grid;
+        return false;
     }
+    @Test
+    void testGetWinningCells(){
+        Board board = boardFactory.createBoard(GameType.STANDARD);
+        board.placeMove(0, 0, "X");
+        board.placeMove(0, 1, "X");
+        board.placeMove(0, 2, "X");
+
+        board.getWinCondition().checkForWin(board);
+        int[][] winningCells = board.getWinningCells();
+
+        assertNotNull(winningCells);
+        assertEquals(3, winningCells.length);
+        assertTrue(containsCell(winningCells, 0, 0));
+        assertTrue(containsCell(winningCells, 0, 1));
+        assertTrue(containsCell(winningCells, 0, 2));
+    }
+
+
 }

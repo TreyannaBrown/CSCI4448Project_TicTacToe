@@ -131,7 +131,7 @@ public class SwingTicTacToe implements GameObserver {
             return button;
         }
 
-        button.addActionListener(_ -> handleMove(row, col));
+        button.addActionListener(e -> handleMove(row, col));
         return button;
     }
 
@@ -171,7 +171,7 @@ public class SwingTicTacToe implements GameObserver {
 
         updateStatus();
 
-        Timer timer = new Timer(COMPUTER_MOVE_DELAY, _ -> makeComputerMove());
+        Timer timer = new Timer(COMPUTER_MOVE_DELAY, e -> makeComputerMove());
         timer.setRepeats(false);
         timer.start();
     }
@@ -283,7 +283,7 @@ public class SwingTicTacToe implements GameObserver {
         frame.revalidate();
         frame.repaint();
 
-        Timer timer = new Timer(GAME_OVER_DELAY, _ -> showGameOverScreen());
+        Timer timer = new Timer(GAME_OVER_DELAY, e -> showGameOverScreen());
         timer.setRepeats(false);
         timer.start();
     }
@@ -347,7 +347,7 @@ public class SwingTicTacToe implements GameObserver {
     private JButton createReplayButton() {
         JButton replayButton = createEndButton("Replay");
 
-        replayButton.addActionListener(_ -> {
+        replayButton.addActionListener(e -> {
             gameOverScreenShown = false;
             game.resetGame();
 
@@ -373,7 +373,7 @@ public class SwingTicTacToe implements GameObserver {
     private JButton createMainMenuButton() {
         JButton mainMenuButton = createEndButton("Return to Main Menu");
 
-        mainMenuButton.addActionListener(_ -> {
+        mainMenuButton.addActionListener(e -> {
             frame.dispose();
 
             if (returnToMenuAction != null) {
