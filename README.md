@@ -14,6 +14,7 @@ Tic-Tac-Toe is a classic game played by people of all ages around the world! Thi
 Run StartMenu.java to start the game. 
 
 **Design Patterns Used**
+
 -MVC (Model-View-Controller)
 
 Separates the game logic (TicTacToe, Board) from the UI (SwingTicTacToe, StartMenu).
