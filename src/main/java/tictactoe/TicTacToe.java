@@ -120,7 +120,7 @@ public class TicTacToe {
         }
     }
     public void resetGame() {
-        this.board = new Board();
+        this.board = factory.createBoard(gameType);
 
         if (startingPlayer == player1) {
             startingPlayer = player2;
