@@ -138,7 +138,11 @@ public class SwingTicTacToe implements GameObserver {
         updateScore();
 
         if (game.isGameOver()) {
-            showGameOverScreen();
+            highlightWinningCells();
+
+            Timer timer = new Timer(1000, e -> showGameOverScreen());
+            timer.setRepeats(false);
+            timer.start();
         }
     }
 
@@ -146,7 +150,11 @@ public class SwingTicTacToe implements GameObserver {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
                 String value = game.getBoard().getValue(row, col);
+
                 buttons[row][col].setText(value == null ? "" : value);
+                buttons[row][col].setBackground(buttonColor);
+                buttons[row][col].setForeground(accentColor);
+                buttons[row][col].setBorder(BorderFactory.createLineBorder(accentColor, 3));
             }
         }
     }
@@ -250,5 +258,20 @@ public class SwingTicTacToe implements GameObserver {
         button.setFocusPainted(false);
         button.setBorder(BorderFactory.createLineBorder(accentColor, 3));
         return button;
+    }
+
+    private void highlightWinningCells() {
+        int[][] winningCells = game.getWinningCells();
+
+        if (winningCells == null) {
+            return;
+        }
+
+        for (int[] cell : winningCells) {
+            int row = cell[0];
+            int col = cell[1];
+
+            buttons[row][col].setBorder(BorderFactory.createLineBorder(Color.YELLOW, 6));
+        }
     }
 }
